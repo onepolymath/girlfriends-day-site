@@ -2,12 +2,12 @@
    ✏️  CUSTOMIZE EACH ORDER HERE (the only file you edit)
    ============================================================ */
 window.GFD = {
-  herName: "Jill",
-  yourName: "Jack",
-  monogram: "J · J",
+  herName: "Rahamah",
+  yourName: "Yusu",
+  monogram: "R · Y",
 
   // The day you got together (year, month 1-12, day)
-  togetherSince: { year: 2024, month: 2, day: 14 },
+  togetherSince: { year: 2021, month: 2, day: 14 },
 
   letter: [
     "Happy Girlfriend's Day. I've been trying to find the words all week, and every one of them came out too small for what I actually mean.",
