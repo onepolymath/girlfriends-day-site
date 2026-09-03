@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#120810">
+<title>For Her · 05 · The Time</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://images.unsplash.com">
+<link href="https://api.fontshare.com/v2/css?f[]=zodiak@400,401,700&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<script src="config.js"></script>
+<style>
+  .since { margin-top: 10px; font-size: 12px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ink-dim); }
+  .clock {
+    display: grid;
+    grid-template-columns: repeat(2, clamp(130px, 19vw, 215px));
+    margin: clamp(40px, 2.8vw + 29px, 62px) 0 8px;
+    border: 1px solid var(--hairline);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(18, 8, 16, 0.3);
+  }
+  .cell {
+    padding: clamp(26px, 1.8vw + 19px, 40px) 12px clamp(20px, 1.4vw + 14px, 32px);
+    border: 0 solid var(--hairline);
+  }
+  .cell:nth-child(1) { border-right-width: 1px; border-bottom-width: 1px; }
+  .cell:nth-child(2) { border-bottom-width: 1px; }
+  .cell:nth-child(3) { border-right-width: 1px; }
+  .cell b {
+    display: block;
+    font-family: var(--serif);
+    font-weight: 400;
+    /* scales slower than the cell (17vw) so a 4-digit day count always fits */
+    font-size: clamp(36px, 5.6vw, 64px);
+    line-height: 1;
+    color: var(--gold-soft);
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 0 34px rgba(227, 178, 107, 0.35);
+  }
+  .cell span {
+    display: block;
+    margin-top: 9px;
+    font-size: clamp(10px, 0.3vw + 8.8px, 12.5px);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .worth { margin-top: clamp(26px, 1.8vw + 19px, 40px); font-family: var(--serif); font-style: italic; font-size: clamp(19px, 0.8vw + 16px, 26px); color: var(--ink-dim); }
+</style>
+</head>
+<body data-page="us" data-idx="5" data-next="forever.html" data-next-title="Forever" data-next-bg="https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=1600&q=80">
+<div class="backdrop" style="background-image:url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1600&q=80')"></div>
+
+<main class="page">
+  <div class="stage">
+    <div class="eyebrow">Page Five</div>
+    <h1 class="h2">We've been us for</h1>
+    <div class="since" id="since"></div>
+    <div class="clock tilt">
+      <div class="cell"><b id="c-days">0</b><span>days</span></div>
+      <div class="cell"><b id="c-hours">0</b><span>hours</span></div>
+      <div class="cell"><b id="c-mins">0</b><span>minutes</span></div>
+      <div class="cell"><b id="c-secs">0</b><span>seconds</span></div>
+    </div>
+    <div class="worth">…and every second has been worth it.</div>
+  </div>
+</main>
+
+<script src="shared.js"></script>
+<script>
+(() => {
+  const d0 = new Date(GFD.togetherSince.year, GFD.togetherSince.month - 1, GFD.togetherSince.day);
+  document.getElementById("since").textContent = "since " +
+    d0.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  const $ = id => document.getElementById(id);
+  const tick = () => {
+    let s = Math.max(0, Math.floor((Date.now() - d0.getTime()) / 1000));
+    const days = Math.floor(s / 86400); s -= days * 86400;
+    const hrs  = Math.floor(s / 3600);  s -= hrs * 3600;
+    const mins = Math.floor(s / 60);    s -= mins * 60;
+    $("c-days").textContent = days.toLocaleString();
+    $("c-hours").textContent = hrs;
+    $("c-mins").textContent = mins;
+    $("c-secs").textContent = s;
+  };
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+</body>
+</html>

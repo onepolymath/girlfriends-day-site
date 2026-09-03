@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#120810">
+<title>For Her · 03 · The Gallery</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://images.unsplash.com">
+<link href="https://api.fontshare.com/v2/css?f[]=zodiak@400,401,700&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<script src="config.js"></script>
+<style>
+  .ring-stage {
+    width: clamp(184px, 47vw, 290px);
+    height: clamp(250px, 64vw, 394px);
+    position: relative;
+    perspective: 1200px;
+    margin: clamp(46px, 3vw + 34px, 68px) 0 clamp(34px, 2vw + 26px, 52px);
+    touch-action: pan-y;
+  }
+  .ring {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+  }
+  .frame {
+    position: absolute;
+    inset: 0;
+    background: var(--paper);
+    border-radius: 4px;
+    padding: 10px 10px 0;
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    backface-visibility: hidden;
+  }
+  .frame .photo {
+    flex: 1;
+    border-radius: 2px;
+    background-size: cover;
+    background-position: center;
+    filter: saturate(0.92) contrast(1.02);
+  }
+  .frame figcaption {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 9px 2px 10px;
+    color: var(--paper-ink);
+  }
+  .frame .cap-title {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(13.5px, 0.45vw + 11.7px, 17px);
+  }
+  .frame .cap-num {
+    font-size: 9px;
+    letter-spacing: 0.24em;
+    opacity: 0.5;
+  }
+  .drag-hint { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ink-faint); }
+</style>
+</head>
+<body data-page="gallery" data-idx="3" data-next="reasons.html" data-next-title="The Reasons" data-next-bg="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1600&q=80">
+<div class="backdrop" style="background-image:url('https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=1600&q=80')"></div>
+
+<main class="page">
+  <div class="stage">
+    <div class="eyebrow">Page Three</div>
+    <h1 class="h2">Us, in motion</h1>
+    <div class="ring-stage" id="ring-stage">
+      <div class="ring" id="ring"></div>
+    </div>
+    <div class="drag-hint">drag to spin the memories</div>
+  </div>
+</main>
+
+<script src="shared.js"></script>
+<script>
+(() => {
+  const DEMO = [
+    "https://images.unsplash.com/photo-1487035242901-d419a42d17af?w=640&q=75",
+    "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=640&q=75",
+    "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=640&q=75",
+    "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=640&q=75",
+    "https://images.unsplash.com/photo-1508615039623-a25605d2b022?w=640&q=75",
+    "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=640&q=75"
+  ];
+  const photos = GFD.photos.length ? GFD.photos : DEMO;
+  const caps = GFD.photoCaptions;
+  const ring = document.getElementById("ring");
+  const stage = document.getElementById("ring-stage");
+  const n = photos.length;
+  const radius = Math.round((stage.offsetWidth / 2) / Math.tan(Math.PI / n)) + 46;
+
+  photos.forEach((src, i) => {
+    const f = document.createElement("figure");
+    f.className = "frame";
+    f.style.transform = `rotateY(${(360 / n) * i}deg) translateZ(${radius}px)`;
+    f.innerHTML = `
+      <div class="photo" style="background-image:url('${src}')"></div>
+      <figcaption>
+        <span class="cap-title">${caps[i % caps.length] || ""}</span>
+        <span class="cap-num">${String(i + 1).padStart(2, "0")} / ${String(n).padStart(2, "0")}</span>
+      </figcaption>`;
+    ring.appendChild(f);
+  });
+
+  let angle = 0, spinning = true, dragX = null, startAngle = 0;
+  const render = () => {
+    ring.style.transform = `translateZ(${-radius}px) rotateX(-5deg) rotateY(${angle}deg)`;
+  };
+  const tickSpin = () => { if (spinning) { angle += 0.22; render(); } requestAnimationFrame(tickSpin); };
+  tickSpin();
+
+  const px = e => (e.touches ? e.touches[0].clientX : e.clientX);
+  const down = e => { spinning = false; dragX = px(e); startAngle = angle; };
+  const move = e => { if (dragX !== null) { angle = startAngle + (px(e) - dragX) * 0.5; render(); } };
+  const up = () => { if (dragX !== null) { dragX = null; setTimeout(() => spinning = true, 2200); } };
+  stage.addEventListener("mousedown", down);
+  stage.addEventListener("touchstart", down, { passive: true });
+  addEventListener("mousemove", move);
+  addEventListener("touchmove", move, { passive: true });
+  addEventListener("mouseup", up);
+  addEventListener("touchend", up);
+})();
+</script>
+</body>
+</html>

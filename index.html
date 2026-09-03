@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#120810">
+<title>For Her · 01 · The Cover</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://images.unsplash.com">
+<link href="https://api.fontshare.com/v2/css?f[]=zodiak@400,401,700&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<script src="config.js"></script>
+<style>
+  .seal-mark {
+    width: clamp(74px, 6vw + 50px, 108px);
+    height: clamp(74px, 6vw + 50px, 108px);
+    margin-bottom: clamp(30px, 2.6vw + 20px, 46px);
+    filter: drop-shadow(0 6px 22px rgba(227, 178, 107, 0.35));
+  }
+  .cover-name { color: var(--gold-soft); }
+  .cover-kicker { margin-top: 26px; }
+</style>
+</head>
+<body data-page="cover" data-idx="1" data-next="letter.html" data-next-title="The Letter" data-next-bg="https://images.unsplash.com/photo-1487035242901-d419a42d17af?w=1600&q=80">
+<div class="backdrop" style="background-image:url('https://images.unsplash.com/photo-1487035242901-d419a42d17af?w=1600&q=80')"></div>
+
+<main class="page">
+  <div class="stage">
+    <div class="tilt">
+      <svg class="seal-mark" viewBox="0 0 74 74">
+        <defs>
+          <radialGradient id="wax" cx="38%" cy="30%">
+            <stop offset="0%" stop-color="#F6DDAE"/>
+            <stop offset="55%" stop-color="#E3B26B"/>
+            <stop offset="100%" stop-color="#B9853C"/>
+          </radialGradient>
+        </defs>
+        <circle cx="37" cy="37" r="34" fill="url(#wax)"/>
+        <circle cx="37" cy="37" r="28.5" fill="none" stroke="#8a6127" stroke-width="0.8" opacity="0.55"/>
+        <text x="37" y="43" text-anchor="middle" font-family="Zodiak, Georgia, serif" font-style="italic"
+              font-size="16" fill="#5d3d14" id="seal-initials">T·A</text>
+      </svg>
+      <div class="eyebrow">August 1 · Girlfriend's Day</div>
+      <h1 class="display"><span class="plain">For</span> <span class="cover-name" id="her-name"></span></h1>
+      <div class="hairline-rule"></div>
+      <p class="lede cover-kicker" id="cover-lede"></p>
+    </div>
+  </div>
+</main>
+
+<script src="shared.js"></script>
+<script>
+  document.getElementById("her-name").textContent = GFD.herName;
+  document.getElementById("cover-lede").textContent =
+    `A love letter in six pages, written for you by ${GFD.yourName}.`;
+  document.getElementById("seal-initials").textContent = GFD.monogram;
+</script>
+</body>
+</html>
