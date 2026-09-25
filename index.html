@@ -1,382 +1,59 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>A Little Love Note</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --pink: #ef4f78;
-      --deep-pink: #c52d59;
-      --ink: #522238;
-      --paper: #fffaf4;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      font-family: Georgia, "Times New Roman", serif;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 20% 20%, #ffd9e4 0 12%, transparent 13%),
-        radial-gradient(circle at 80% 75%, #ffe7c5 0 15%, transparent 16%),
-        linear-gradient(135deg, #fff0f5, #ffe2e8);
-    }
-
-    .love-card {
-      width: min(90vw, 440px);
-      padding: 42px 28px;
-      text-align: center;
-      border: 1px solid rgb(255 255 255 / 70%);
-      border-radius: 28px;
-      background: rgb(255 255 255 / 55%);
-      box-shadow: 0 24px 60px rgb(142 45 76 / 18%);
-      backdrop-filter: blur(8px);
-    }
-
-    h1 {
-      margin: 0 0 8px;
-      font-size: clamp(2rem, 8vw, 3rem);
-    }
-
-    .subtitle {
-      margin: 0 0 30px;
-      color: #865368;
-      font-size: 1.05rem;
-    }
-
-    .heart-button {
-      display: inline-grid;
-      place-items: center;
-      width: 150px;
-      height: 135px;
-      border: 0;
-      cursor: pointer;
-      color: white;
-      background: transparent;
-      transition: transform 180ms ease;
-    }
-
-    .heart-button:hover,
-    .heart-button:focus-visible {
-      transform: scale(1.08);
-      outline: none;
-    }
-
-    .heart-button:focus-visible {
-      filter: drop-shadow(0 0 0.35rem #fff);
-    }
-
-    .envelope-scene {
-      position: fixed;
-      inset: 0;
-      z-index: 9;
-      display: grid;
-      place-items: center;
-      pointer-events: none;
-      opacity: 0;
-      background: rgb(70 19 40 / 28%);
-    }
-
-    .envelope-scene.is-opening {
-      opacity: 1;
-      transition: opacity 180ms ease;
-    }
-
-    .envelope {
-      position: relative;
-      width: min(78vw, 340px);
-      height: 220px;
-      transform: translateY(25px) scale(0.8);
-      border-radius: 10px;
-      background: #f4c8b8;
-      box-shadow: 0 22px 45px rgb(89 23 51 / 28%);
-      overflow: hidden;
-    }
-
-    .envelope-scene.is-opening .envelope {
-      animation: envelope-arrive 500ms ease-out forwards;
-    }
-
-    .envelope::before,
-    .envelope::after {
-      position: absolute;
-      z-index: 2;
-      content: "";
-      width: 72%;
-      height: 3px;
-      background: #dfa394;
-    }
-
-    .envelope::before {
-      bottom: 48px;
-      left: -10px;
-      transform: rotate(32deg);
-    }
-
-    .envelope::after {
-      right: -10px;
-      bottom: 48px;
-      transform: rotate(-32deg);
-    }
-
-    .envelope-flap {
-      position: absolute;
-      z-index: 4;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 0;
-      border-top: 118px solid #f8d7c9;
-      border-right: 170px solid transparent;
-      border-left: 170px solid transparent;
-      transform-origin: top center;
-    }
-
-    .envelope-scene.is-opening .envelope-flap {
-      animation: flap-open 650ms 420ms ease-in forwards;
-    }
-
-    .envelope-letter {
-      position: absolute;
-      z-index: 3;
-      left: 10%;
-      bottom: 12px;
-      width: 80%;
-      height: 150px;
-      padding: 34px 10px;
-      text-align: center;
-      color: var(--deep-pink);
-      background: var(--paper);
-      font-size: 1.15rem;
-      font-weight: bold;
-      transform: translateY(100px);
-    }
-
-    .envelope-scene.is-opening .envelope-letter {
-      animation: letter-rise 700ms 500ms ease-out forwards;
-    }
-
-    @keyframes envelope-arrive {
-      to { transform: translateY(0) scale(1); }
-    }
-
-    @keyframes flap-open {
-      to { transform: rotateX(180deg); }
-    }
-
-    @keyframes letter-rise {
-      to { transform: translateY(-85px); }
-    }
-
-    .heart {
-      position: relative;
-      width: 88px;
-      height: 88px;
-      transform: rotate(-45deg);
-      border-radius: 12px 0 12px 0;
-      background: var(--pink);
-      box-shadow: 7px 7px 18px rgb(197 45 89 / 25%);
-      animation: heartbeat 1.4s infinite;
-    }
-
-    .heart::before,
-    .heart::after {
-      position: absolute;
-      content: "";
-      width: 88px;
-      height: 88px;
-      border-radius: 50%;
-      background: var(--pink);
-    }
-
-    .heart::before {
-      top: -44px;
-      left: 0;
-    }
-
-    .heart::after {
-      top: 0;
-      left: 44px;
-    }
-
-    .button-label {
-      position: absolute;
-      z-index: 1;
-      margin-top: 1px;
-      font-size: 0.9rem;
-      font-weight: bold;
-      text-shadow: 0 1px 3px rgb(120 25 53 / 45%);
-    }
-
-    .emoji-burst {
-      position: fixed;
-      inset: 0;
-      z-index: 10;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    .emoji {
-      position: absolute;
-      bottom: 42%;
-      left: 50%;
-      font-size: clamp(1.4rem, 5vw, 2.2rem);
-      animation: float-away 1.8s ease-out forwards;
-    }
-
-    @keyframes float-away {
-      0% {
-        opacity: 0;
-        transform: translate(-50%, 0) scale(0.4) rotate(0deg);
-      }
-      15% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-        transform: translate(calc(-50% + var(--x)), var(--y)) scale(1.15) rotate(var(--rotation));
-      }
-    }
-
-    @keyframes heartbeat {
-      0%, 100% { transform: rotate(-45deg) scale(1); }
-      15% { transform: rotate(-45deg) scale(1.08); }
-      30% { transform: rotate(-45deg) scale(1); }
-    }
-
-    dialog {
-      width: min(88vw, 420px);
-      padding: 0;
-      border: 0;
-      border-radius: 18px;
-      color: var(--ink);
-      background: var(--paper);
-      box-shadow: 0 24px 70px rgb(89 23 51 / 35%);
-    }
-
-    dialog::backdrop {
-      background: rgb(70 19 40 / 42%);
-      backdrop-filter: blur(3px);
-    }
-
-    .letter {
-      padding: 34px 28px 28px;
-      text-align: center;
-      background: linear-gradient(transparent 95%, #f5d9c6 95%);
-      background-size: 100% 34px;
-    }
-
-    .letter h2 {
-      margin: 0 0 22px;
-      color: var(--deep-pink);
-      font-size: 1.65rem;
-    }
-
-    .message {
-      margin: 0 0 26px;
-      font-size: clamp(1.6rem, 7vw, 2.35rem);
-      font-weight: bold;
-      letter-spacing: 0.04em;
-      line-height: 1.2;
-    }
-
-    .signature {
-      margin: 0 0 24px;
-      font-style: italic;
-    }
-
-    .close-button {
-      padding: 10px 20px;
-      border: 0;
-      border-radius: 999px;
-      cursor: pointer;
-      color: white;
-      background: var(--deep-pink);
-      font: inherit;
-    }
-
-    .close-button:hover {
-      background: #a9224a;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#120810">
+<title>For Her · 01 · The Cover</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://images.unsplash.com">
+<link href="https://api.fontshare.com/v2/css?f[]=zodiak@400,401,700&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<script src="config.js"></script>
+<style>
+  .seal-mark {
+    width: clamp(74px, 6vw + 50px, 108px);
+    height: clamp(74px, 6vw + 50px, 108px);
+    margin-bottom: clamp(30px, 2.6vw + 20px, 46px);
+    filter: drop-shadow(0 6px 22px rgba(227, 178, 107, 0.35));
+  }
+  .cover-name { color: var(--gold-soft); }
+  .cover-kicker { margin-top: 26px; }
+</style>
 </head>
-<body>
-  <main class="love-card">
-    <h1>A little surprise</h1>
-    <p class="subtitle">Click the heart to open your love letter</p>
-    <button class="heart-button" id="open-letter" type="button" aria-label="Open your love letter">
-      <span class="heart" aria-hidden="true"></span>
-      <span class="button-label">Open me</span>
-    </button>
-  </main>
+<body data-page="cover" data-idx="1" data-next="letter.html" data-next-title="The Letter" data-next-bg="https://images.unsplash.com/photo-1487035242901-d419a42d17af?w=1600&q=80">
+<div class="backdrop" style="background-image:url('https://images.unsplash.com/photo-1487035242901-d419a42d17af?w=1600&q=80')"></div>
 
-  <dialog id="love-letter" aria-labelledby="letter-title">
-    <article class="letter">
-      <h2 id="letter-title">My love letter</h2>
-      <p class="message">I MISS YOU BABE</p>
-      <p class="signature">With all my love ❤️</p>
-      <button class="close-button" id="close-letter" type="button">Close letter</button>
-    </article>
-  </dialog>
-  <div class="emoji-burst" id="emoji-burst" aria-hidden="true"></div>
-  <div class="envelope-scene" id="envelope-scene" aria-hidden="true">
-    <div class="envelope">
-      <div class="envelope-letter">For you, my love</div>
-      <div class="envelope-flap"></div>
+<main class="page">
+  <div class="stage">
+    <div class="tilt">
+      <svg class="seal-mark" viewBox="0 0 74 74">
+        <defs>
+          <radialGradient id="wax" cx="38%" cy="30%">
+            <stop offset="0%" stop-color="#F6DDAE"/>
+            <stop offset="55%" stop-color="#E3B26B"/>
+            <stop offset="100%" stop-color="#B9853C"/>
+          </radialGradient>
+        </defs>
+        <circle cx="37" cy="37" r="34" fill="url(#wax)"/>
+        <circle cx="37" cy="37" r="28.5" fill="none" stroke="#8a6127" stroke-width="0.8" opacity="0.55"/>
+        <text x="37" y="43" text-anchor="middle" font-family="Zodiak, Georgia, serif" font-style="italic"
+              font-size="16" fill="#5d3d14" id="seal-initials">T·A</text>
+      </svg>
+      <div class="eyebrow">August 1 · Girlfriend's Day</div>
+      <h1 class="display"><span class="plain">For</span> <span class="cover-name" id="her-name"></span></h1>
+      <div class="hairline-rule"></div>
+      <p class="lede cover-kicker" id="cover-lede"></p>
     </div>
   </div>
+</main>
 
-  <script>
-    const openButton = document.querySelector("#open-letter");
-    const closeButton = document.querySelector("#close-letter");
-    const letter = document.querySelector("#love-letter");
-    const emojiBurst = document.querySelector("#emoji-burst");
-    const envelopeScene = document.querySelector("#envelope-scene");
-    const loveEmojis = ["❤️", "💕", "💖", "💗", "💘", "💝"];
-
-    function createEmojiBurst() {
-      emojiBurst.replaceChildren();
-      loveEmojis.forEach((emoji, index) => {
-        const element = document.createElement("span");
-        element.className = "emoji";
-        element.textContent = emoji;
-        element.style.setProperty("--x", `${(index - 2.5) * 70 + (index % 2) * 18}px`);
-        element.style.setProperty("--y", `${-150 - (index % 3) * 55}px`);
-        element.style.setProperty("--rotation", `${(index % 2 ? 1 : -1) * (15 + index * 7)}deg`);
-        element.style.animationDelay = `${index * 55}ms`;
-        emojiBurst.append(element);
-      });
-    }
-
-    openButton.addEventListener("click", () => {
-      createEmojiBurst();
-      envelopeScene.classList.add("is-opening");
-      window.setTimeout(() => {
-        letter.showModal();
-        envelopeScene.classList.remove("is-opening");
-      }, 1450);
-    });
-    closeButton.addEventListener("click", () => letter.close());
-    letter.addEventListener("click", (event) => {
-      if (event.target === letter) letter.close();
-    });
-  </script>
+<script src="shared.js"></script>
+<script>
+  document.getElementById("her-name").textContent = GFD.herName;
+  document.getElementById("cover-lede").textContent =
+    `A love letter in six pages, written for you by ${GFD.yourName}.`;
+  document.getElementById("seal-initials").textContent = GFD.monogram;
+</script>
 </body>
 </html>
